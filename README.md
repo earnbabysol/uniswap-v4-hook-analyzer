@@ -1,48 +1,87 @@
 # Uniswap V4 Hook Analyzer
 
-分析 Uniswap V4 Hook 合约的抽税机制与潜在风险。
+🔍 自动分析 Uniswap V4 Hook 合约的抽税机制与风险评估工具
 
-## 功能特性
+## 🌐 在线使用
 
-- 🔍 支持多链分析：Ethereum、Base、Arbitrum、BSC、X Layer
-- 💰 自动识别费用提取机制
-- 🔐 检测权限控制模式
-- ⚠️ 标记可疑代码模式
-- 📊 风险评分系统
+访问: https://earnbabysol.github.io/uniswap-v4-hook-analyzer/
 
-## 使用方法
+## ✨ 功能特性
 
-1. 选择目标链
-2. 输入 Hook 合约地址
+### 支持的区块链
+- Ethereum
+- Base
+- Arbitrum
+- Optimism
+- Polygon
+- BSC (Binance Smart Chain)
+- Avalanche
+- X Layer
+- Robinhood Network
+
+### 分析能力
+1. **费用机制检测**
+   - Swap 费用提取
+   - LP 费用分配
+   - 协议费用
+   - 动态费用机制
+
+2. **权限分析**
+   - Owner 权限
+   - 管理员角色
+   - 紧急暂停功能
+   - 合约升级能力
+
+3. **风险评估**
+   - 中心化风险
+   - 可升级合约风险
+   - 蜜罐特征检测
+   - 税率分析
+   - 综合风险评分
+
+4. **代码扫描**
+   - 自动识别关键函数
+   - 检测可疑模式
+   - 高亮风险代码
+
+## 🚀 使用方法
+
+1. 选择目标区块链
+2. 输入已验证的 Uniswap V4 Hook 合约地址
 3. 点击"开始分析"
+4. 查看详细的分析报告
 
-## 技术栈
+## ⚠️ 重要提示
 
-- React + Vite
-- Ethers.js
-- 多链 RPC 支持
+- 合约必须在区块链浏览器上**已验证**（有源代码）才能分析
+- 工具仅分析已公开的智能合约代码
+- 分析结果仅供参考，不构成投资建议
+- 使用前请自行做好尽职调查
 
-## 本地开发
+## 🛠️ 本地开发
 
 ```bash
+# 安装依赖
 npm install
+
+# 启动开发服务器
 npm run dev
-```
 
-## 部署
-
-```bash
+# 构建生产版本
 npm run build
 ```
 
-构建产物在 `dist` 目录，可直接部署到 GitHub Pages。
+## 📝 技术栈
 
-## 注意事项
+- React 18
+- Vite
+- ethers.js v6
+- Ankr RPC (公共节点)
 
-- 合约必须在区块链浏览器上验证源码
-- 分析结果仅供参考，不构成投资建议
-- 建议结合人工审计进行综合判断
-
-## License
+## 📄 License
 
 MIT
+
+---
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)

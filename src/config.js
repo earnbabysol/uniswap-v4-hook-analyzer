@@ -23,11 +23,35 @@ export const CHAINS = {
     rpc: 'https://bsc-dataseed.binance.org',
     explorer: 'https://bscscan.com'
   },
+  optimism: {
+    id: 10,
+    name: 'Optimism',
+    rpc: 'https://mainnet.optimism.io',
+    explorer: 'https://optimistic.etherscan.io'
+  },
+  polygon: {
+    id: 137,
+    name: 'Polygon',
+    rpc: 'https://polygon-rpc.com',
+    explorer: 'https://polygonscan.com'
+  },
+  avalanche: {
+    id: 43114,
+    name: 'Avalanche',
+    rpc: 'https://api.avax.network/ext/bc/C/rpc',
+    explorer: 'https://snowtrace.io'
+  },
   xlayer: {
     id: 196,
     name: 'X Layer',
     rpc: 'https://rpc.xlayer.tech',
-    explorer: 'https://www.oklink.com/xlayer'
+    explorer: 'https://www.okx.com/web3/explorer/xlayer'
+  },
+  robinhood: {
+    id: 1116,
+    name: 'Robinhood',
+    rpc: 'https://rpc.robinhood.network',
+    explorer: 'https://explorer.robinhood.network'
   }
 };
 

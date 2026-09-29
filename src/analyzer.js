@@ -2,15 +2,15 @@ import { ethers } from 'ethers';
 
 // Uniswap V4 PoolManager 合约地址（实际部署地址）
 const POOL_MANAGER_ADDRESSES = {
-  1: '0x000000000000C6A645b0E51C6eCAc63E30c30511', // Ethereum
-  8453: '0x7Da1D65F8B249183667cdE74C5CBD46dD38AA829', // Base
-  42161: '0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865', // Arbitrum
-  10: '0x2e8614625226D26180aDf6530C3b1677d3D7cf10', // Optimism
-  137: '0x5a1e8D58e523c8e57A4f95B74d5bb6BC7c3A0293', // Polygon
-  56: '0x000000000000C6A645b0E51C6eCAc63E30c30511', // BSC
-  43114: '0x0000000000000000000000000000000000000000', // Avalanche - 待更新
-  196: '0x0000000000000000000000000000000000000000', // X Layer - 待更新
-  1116: '0x0000000000000000000000000000000000000000', // Robinhood - 待更新
+  1: ethers.getAddress('0x000000000000c6a645b0e51c6ecac63e30c30511'), // Ethereum
+  8453: ethers.getAddress('0x7da1d65f8b249183667cde74c5cbd46dd38aa829'), // Base
+  42161: ethers.getAddress('0x0bfbcf9fa4f9c56b0f40a671ad40e0805a091865'), // Arbitrum
+  10: ethers.getAddress('0x2e8614625226d26180adf6530c3b1677d3d7cf10'), // Optimism
+  137: ethers.getAddress('0x5a1e8d58e523c8e57a4f95b74d5bb6bc7c3a0293'), // Polygon
+  56: ethers.getAddress('0x000000000000c6a645b0e51c6ecac63e30c30511'), // BSC
+  43114: ethers.ZeroAddress, // Avalanche - 待更新
+  196: ethers.ZeroAddress, // X Layer - 待更新
+  1116: ethers.ZeroAddress, // Robinhood - 待更新
 };
 
 const POOL_MANAGER_ABI = [

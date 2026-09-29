@@ -1,13 +1,70 @@
 import { ethers } from 'ethers';
 
-const POOL_MANAGER_ABI = [
-  'function getPool(bytes32 id) view returns (tuple(address currency0, address currency1, uint24 fee, int24 tickSpacing, address hooks))'
+// Uniswap V4 PoolManager 合约地址（主网部署地址）
+const POOL_MANAGER_ADDRESSES = {
+  1: '0x0000000000000000000000000000000000000000', // Ethereum - 需要更新为实际地址
+  8453: '0x0000000000000000000000000000000000000000', // Base
+  42161: '0x0000000000000000000000000000000000000000', // Arbitrum
+  // 其他链的 PoolManager 地址
+};
+
+const POOL_ABI = [
+  'function slot0() view returns (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex, uint16 observationCardinality, uint16 observationCardinalityNext, uint8 feeProtocol, bool unlocked)',
+  'function liquidity() view returns (uint128)',
+  'function tickBitmap(int16) view returns (uint256)',
+  'function positions(bytes32) view returns (uint128 liquidity, uint256 feeGrowthInside0LastX128, uint256 feeGrowthInside1LastX128, uint128 tokensOwed0, uint128 tokensOwed1)'
 ];
 
-const GENERIC_ABI = [
-  'function name() view returns (string)',
-  'function symbol() view returns (string)'
-];
+// 尝试从池子合约中提取 hook 地址
+async function extractHookFromPool(provider, poolAddress) {
+  try {
+    // 方法1: 尝试读取存储槽（hook 地址通常在固定位置）
+    // Uniswap V4 Pool 的 hook 地址通常存储在特定的存储槽
+    const hookSlot = await provider.getStorage(poolAddress, 0);
+    const hookAddress = '0x' + hookSlot.slice(26); // 取后20字节
+
+    if (ethers.isAddress(hookAddress) && hookAddress !== '0x0000000000000000000000000000000000000000') {
+      const code = await provider.getCode(hookAddress);
+      if (code !== '0x' && code !== '0x0') {
+        return hookAddress;
+      }
+    }
+
+    // 方法2: 尝试通过事件日志获取
+    const currentBlock = await provider.getBlockNumber();
+    const logs = await provider.getLogs({
+      address: poolAddress,
+      fromBlock: Math.max(0, currentBlock - 10000),
+      toBlock: currentBlock
+    });
+
+    // 从 Initialize 事件中提取 hook 地址
+    for (const log of logs) {
+      if (log.topics[0]) {
+        try {
+          // 解析日志，查找 hook 相关信息
+          const data = log.data;
+          if (data.length >= 66) {
+            const potentialHook = '0x' + data.slice(26, 66);
+            if (ethers.isAddress(potentialHook) && potentialHook !== '0x0000000000000000000000000000000000000000') {
+              const code = await provider.getCode(potentialHook);
+              if (code !== '0x' && code !== '0x0') {
+                return potentialHook;
+              }
+            }
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error('提取 Hook 地址失败:', error);
+    return null;
+  }
+}
 
 export async function fetchHookContract(chain, poolAddress) {
   try {
@@ -18,7 +75,23 @@ export async function fetchHookContract(chain, poolAddress) {
       throw new Error('地址不是合约');
     }
 
-    return { code, provider };
+    // 尝试从池子中提取 Hook 地址
+    const hookAddress = await extractHookFromPool(provider, poolAddress);
+
+    if (!hookAddress) {
+      // 如果没有找到 hook，假设用户输入的就是 hook 地址
+      return { code, provider, hookAddress: poolAddress };
+    }
+
+    // 获取 Hook 合约的代码
+    const hookCode = await provider.getCode(hookAddress);
+
+    return {
+      code: hookCode,
+      provider,
+      hookAddress,
+      isPool: hookAddress !== poolAddress
+    };
   } catch (error) {
     throw new Error(`获取合约失败: ${error.message}`);
   }

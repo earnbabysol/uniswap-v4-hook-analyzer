@@ -24,11 +24,13 @@ function App() {
     try {
       const chain = CHAINS[selectedChain];
 
-      // Fetch contract bytecode
-      await fetchHookContract(chain, poolAddress);
+      // Fetch contract and extract hook address
+      const { hookAddress, isPool } = await fetchHookContract(chain, poolAddress);
+
+      const targetAddress = hookAddress || poolAddress;
 
       // Try to get source code
-      const sourceCode = await decompileContract(chain, poolAddress);
+      const sourceCode = await decompileContract(chain, targetAddress);
 
       if (!sourceCode) {
         setError('无法获取合约源码，请确保合约已在区块链浏览器上验证');
@@ -41,7 +43,9 @@ function App() {
       const risk = calculateRiskLevel(findings.riskScore);
 
       setResult({
-        address: poolAddress,
+        poolAddress: poolAddress,
+        hookAddress: targetAddress,
+        isPool: isPool,
         chain: chain.name,
         findings,
         risk,
@@ -78,7 +82,7 @@ function App() {
           </div>
 
           <div className="form-group">
-            <label>Hook 合约地址</label>
+            <label>池子地址</label>
             <input
               type="text"
               value={poolAddress}
@@ -122,9 +126,15 @@ function App() {
                 <span className="info-value">{result.chain}</span>
               </div>
               <div className="info-item">
-                <span className="info-label">地址</span>
-                <span className="info-value mono">{result.address}</span>
+                <span className="info-label">池子地址</span>
+                <span className="info-value mono">{result.poolAddress}</span>
               </div>
+              {result.isPool && (
+                <div className="info-item">
+                  <span className="info-label">Hook 地址</span>
+                  <span className="info-value mono">{result.hookAddress}</span>
+                </div>
+              )}
               <div className="info-item">
                 <span className="info-label">风险评分</span>
                 <span className="info-value">{result.findings.riskScore}</span>

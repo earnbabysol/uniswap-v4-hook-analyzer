@@ -47,6 +47,12 @@
   margin-bottom: var(--space-md);
 }
 
+.hint {
+  margin-top: var(--space-xs);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
 .form-group label {
   display: block;
   margin-bottom: var(--space-xs);

@@ -83,14 +83,17 @@ function App() {
           </div>
 
           <div className="form-group">
-            <label>池子地址</label>
+            <label>池子地址或 Hook 合约地址</label>
             <input
               type="text"
               value={poolAddress}
               onChange={(e) => setPoolAddress(e.target.value)}
-              placeholder="输入池子 ID (0x... 66位) 或合约地址 (0x... 42位)"
+              placeholder="输入 Hook 合约地址 (0x...)"
               className="input"
             />
+            <div className="hint">
+              💡 提示：直接输入已验证的 Uniswap V4 Hook 合约地址
+            </div>
           </div>
 
           <button

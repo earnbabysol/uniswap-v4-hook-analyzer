@@ -2,49 +2,49 @@ export const CHAINS = {
   ethereum: {
     id: 1,
     name: 'Ethereum',
-    rpc: 'https://eth.llamarpc.com',
+    rpc: 'https://rpc.ankr.com/eth',
     explorer: 'https://etherscan.io'
   },
   base: {
     id: 8453,
     name: 'Base',
-    rpc: 'https://mainnet.base.org',
+    rpc: 'https://rpc.ankr.com/base',
     explorer: 'https://basescan.org'
   },
   arbitrum: {
     id: 42161,
     name: 'Arbitrum',
-    rpc: 'https://arb1.arbitrum.io/rpc',
+    rpc: 'https://rpc.ankr.com/arbitrum',
     explorer: 'https://arbiscan.io'
   },
   bsc: {
     id: 56,
     name: 'BSC',
-    rpc: 'https://bsc-dataseed.binance.org',
+    rpc: 'https://rpc.ankr.com/bsc',
     explorer: 'https://bscscan.com'
   },
   optimism: {
     id: 10,
     name: 'Optimism',
-    rpc: 'https://mainnet.optimism.io',
+    rpc: 'https://rpc.ankr.com/optimism',
     explorer: 'https://optimistic.etherscan.io'
   },
   polygon: {
     id: 137,
     name: 'Polygon',
-    rpc: 'https://polygon-rpc.com',
+    rpc: 'https://rpc.ankr.com/polygon',
     explorer: 'https://polygonscan.com'
   },
   avalanche: {
     id: 43114,
     name: 'Avalanche',
-    rpc: 'https://api.avax.network/ext/bc/C/rpc',
+    rpc: 'https://rpc.ankr.com/avalanche',
     explorer: 'https://snowtrace.io'
   },
   xlayer: {
     id: 196,
     name: 'X Layer',
-    rpc: 'https://rpc.xlayer.tech',
+    rpc: 'https://rpc.ankr.com/xlayer',
     explorer: 'https://www.okx.com/web3/explorer/xlayer'
   },
   robinhood: {

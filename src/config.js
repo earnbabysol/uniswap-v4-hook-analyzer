@@ -2,56 +2,65 @@ export const CHAINS = {
   ethereum: {
     id: 1,
     name: 'Ethereum',
-    rpc: 'https://rpc.ankr.com/eth',
-    explorer: 'https://etherscan.io'
+    rpc: 'https://eth.llamarpc.com',
+    explorer: 'https://etherscan.io',
+    explorerApiUrl: 'https://api.etherscan.io/api'
   },
   base: {
     id: 8453,
     name: 'Base',
-    rpc: 'https://rpc.ankr.com/base',
-    explorer: 'https://basescan.org'
+    rpc: 'https://mainnet.base.org',
+    explorer: 'https://basescan.org',
+    explorerApiUrl: 'https://api.basescan.org/api'
   },
   arbitrum: {
     id: 42161,
     name: 'Arbitrum',
-    rpc: 'https://rpc.ankr.com/arbitrum',
-    explorer: 'https://arbiscan.io'
+    rpc: 'https://arb1.arbitrum.io/rpc',
+    explorer: 'https://arbiscan.io',
+    explorerApiUrl: 'https://api.arbiscan.io/api'
   },
   bsc: {
     id: 56,
     name: 'BSC',
-    rpc: 'https://rpc.ankr.com/bsc',
-    explorer: 'https://bscscan.com'
+    rpc: 'https://bsc-dataseed1.binance.org',
+    explorer: 'https://bscscan.com',
+    explorerApiUrl: 'https://api.bscscan.com/api'
   },
   optimism: {
     id: 10,
     name: 'Optimism',
-    rpc: 'https://rpc.ankr.com/optimism',
-    explorer: 'https://optimistic.etherscan.io'
+    rpc: 'https://mainnet.optimism.io',
+    explorer: 'https://optimistic.etherscan.io',
+    explorerApiUrl: 'https://api-optimistic.etherscan.io/api'
   },
   polygon: {
     id: 137,
     name: 'Polygon',
-    rpc: 'https://rpc.ankr.com/polygon',
-    explorer: 'https://polygonscan.com'
+    rpc: 'https://polygon-rpc.com',
+    explorer: 'https://polygonscan.com',
+    explorerApiUrl: 'https://api.polygonscan.com/api'
   },
   avalanche: {
     id: 43114,
     name: 'Avalanche',
-    rpc: 'https://rpc.ankr.com/avalanche',
-    explorer: 'https://snowtrace.io'
+    rpc: 'https://api.avax.network/ext/bc/C/rpc',
+    explorer: 'https://snowtrace.io',
+    explorerApiUrl: 'https://api.snowtrace.io/api'
   },
   xlayer: {
     id: 196,
     name: 'X Layer',
-    rpc: 'https://rpc.ankr.com/xlayer',
-    explorer: 'https://www.okx.com/web3/explorer/xlayer'
+    rpc: 'https://rpc.xlayer.tech',
+    explorer: 'https://www.okx.com/web3/explorer/xlayer',
+    explorerApiUrl: 'https://www.okx.com/api/v5/explorer/xlayer/api'
   },
   robinhood: {
     id: 1116,
     name: 'Robinhood',
     rpc: 'https://rpc.robinhood.network',
-    explorer: 'https://explorer.robinhood.network'
+    explorer: 'https://explorer.robinhood.network',
+    explorerApiUrl: 'https://explorer.robinhood.network/api'
   }
 };
 

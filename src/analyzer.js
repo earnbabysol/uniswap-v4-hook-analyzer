@@ -80,70 +80,26 @@ export async function fetchHookContract(chain, poolInput) {
   try {
     const provider = new ethers.JsonRpcProvider(chain.rpc);
 
-    // 检查输入是 pool ID (bytes32) 还是合约地址
-    const isPoolId = poolInput.length === 66 && poolInput.startsWith('0x');
-    const isAddress = poolInput.length === 42 && poolInput.startsWith('0x') && ethers.isAddress(poolInput);
-
-    let hookAddress = null;
-    let poolAddress = null;
-
-    if (isPoolId) {
-      // 通过 PoolManager 查询池子信息
-      const poolManagerAddress = POOL_MANAGER_ADDRESSES[chain.id];
-
-      if (!poolManagerAddress || poolManagerAddress === '0x0000000000000000000000000000000000000000') {
-        throw new Error(`该链暂不支持 Pool ID 查询，请直接输入 Hook 合约地址`);
-      }
-
-      const poolManager = new ethers.Contract(poolManagerAddress, POOL_MANAGER_ABI, provider);
-
-      try {
-        // 尝试获取池子信息
-        const poolKey = await poolManager.getPoolKey(poolInput);
-        hookAddress = poolKey.hooks;
-
-        if (!hookAddress || hookAddress === '0x0000000000000000000000000000000000000000') {
-          throw new Error('该池子没有 Hook');
-        }
-
-        poolAddress = null; // Pool ID 模式下没有池子合约地址
-      } catch (e) {
-        throw new Error(`无法从 PoolManager 获取池子信息: ${e.message}`);
-      }
-    } else if (isAddress) {
-      // 输入的是合约地址
-      const code = await provider.getCode(poolInput);
-
-      if (code === '0x' || code === '0x0') {
-        throw new Error('地址不是合约');
-      }
-
-      // 尝试从池子中提取 Hook 地址
-      hookAddress = await extractHookFromPool(provider, poolInput);
-
-      if (!hookAddress) {
-        // 如果没有找到 hook，假设用户输入的就是 hook 地址
-        hookAddress = poolInput;
-      } else {
-        poolAddress = poolInput;
-      }
-    } else {
-      throw new Error('请输入有效的池子 ID (66位) 或合约地址 (42位)');
+    // 验证是否是有效的以太坊地址
+    if (!ethers.isAddress(poolInput)) {
+      throw new Error('请输入有效的合约地址 (0x... 42位)');
     }
 
-    // 获取 Hook 合约的代码
-    const hookCode = await provider.getCode(hookAddress);
+    const hookAddress = poolInput;
 
-    if (hookCode === '0x' || hookCode === '0x0') {
-      throw new Error('Hook 地址不是合约');
+    // 检查地址是否是合约
+    const code = await provider.getCode(hookAddress);
+
+    if (code === '0x' || code === '0x0') {
+      throw new Error('该地址不是合约');
     }
 
     return {
-      code: hookCode,
+      code: code,
       provider,
       hookAddress,
-      poolAddress,
-      isPoolId
+      poolAddress: null,
+      isPoolId: false
     };
   } catch (error) {
     throw new Error(`获取合约失败: ${error.message}`);
@@ -151,17 +107,23 @@ export async function fetchHookContract(chain, poolInput) {
 }
 
 export async function decompileContract(chain, address) {
-  const response = await fetch(
-    `${chain.explorer}/api?module=contract&action=getsourcecode&address=${address}`
-  );
+  try {
+    const apiUrl = chain.explorerApiUrl || `${chain.explorer}/api`;
+    const response = await fetch(
+      `${apiUrl}?module=contract&action=getsourcecode&address=${address}`
+    );
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (data.status === '1' && data.result[0].SourceCode) {
-    return data.result[0].SourceCode;
+    if (data.status === '1' && data.result && data.result[0] && data.result[0].SourceCode) {
+      return data.result[0].SourceCode;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('获取源代码失败:', error);
+    return null;
   }
-
-  return null;
 }
 
 export function analyzeHookCode(sourceCode, patterns) {

@@ -12,8 +12,8 @@ function App() {
   const [error, setError] = useState(null);
 
   const handleAnalyze = async () => {
-    if (!poolAddress || !ethers.isAddress(poolAddress)) {
-      setError('请输入有效的合约地址');
+    if (!poolAddress) {
+      setError('请输入池子 ID 或合约地址');
       return;
     }
 
@@ -25,7 +25,7 @@ function App() {
       const chain = CHAINS[selectedChain];
 
       // Fetch contract and extract hook address
-      const { hookAddress, isPool } = await fetchHookContract(chain, poolAddress);
+      const { hookAddress, poolAddress: detectedPoolAddress, isPoolId } = await fetchHookContract(chain, poolAddress);
 
       const targetAddress = hookAddress || poolAddress;
 
@@ -43,9 +43,10 @@ function App() {
       const risk = calculateRiskLevel(findings.riskScore);
 
       setResult({
-        poolAddress: poolAddress,
+        poolInput: poolAddress,
+        poolAddress: detectedPoolAddress,
         hookAddress: targetAddress,
-        isPool: isPool,
+        isPoolId: isPoolId,
         chain: chain.name,
         findings,
         risk,
@@ -87,7 +88,7 @@ function App() {
               type="text"
               value={poolAddress}
               onChange={(e) => setPoolAddress(e.target.value)}
-              placeholder="0x..."
+              placeholder="输入池子 ID (0x... 66位) 或合约地址 (0x... 42位)"
               className="input"
             />
           </div>
@@ -125,16 +126,22 @@ function App() {
                 <span className="info-label">链</span>
                 <span className="info-value">{result.chain}</span>
               </div>
-              <div className="info-item">
-                <span className="info-label">池子地址</span>
-                <span className="info-value mono">{result.poolAddress}</span>
-              </div>
-              {result.isPool && (
+              {result.isPoolId && (
                 <div className="info-item">
-                  <span className="info-label">Hook 地址</span>
-                  <span className="info-value mono">{result.hookAddress}</span>
+                  <span className="info-label">Pool ID</span>
+                  <span className="info-value mono">{result.poolInput}</span>
                 </div>
               )}
+              {result.poolAddress && (
+                <div className="info-item">
+                  <span className="info-label">池子地址</span>
+                  <span className="info-value mono">{result.poolAddress}</span>
+                </div>
+              )}
+              <div className="info-item">
+                <span className="info-label">Hook 地址</span>
+                <span className="info-value mono">{result.hookAddress}</span>
+              </div>
               <div className="info-item">
                 <span className="info-label">风险评分</span>
                 <span className="info-value">{result.findings.riskScore}</span>

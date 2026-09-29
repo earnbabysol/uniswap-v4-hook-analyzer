@@ -5,6 +5,6 @@ export default defineConfig({
   plugins: [react()],
   base: '/uniswap-v4-hook-analyzer/',
   build: {
-    outDir: 'dist'
+    outDir: 'docs'
   }
 })
